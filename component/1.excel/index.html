@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .tableA {
+        border-collapse: collapse;
+        }
+       
+        .tableA .title th{
+        text-align:center;
+        height: 50px;
+        font-size: 24px;
+        font-family: '微软雅黑';
+        font-weight: 700;
+        }
+       
+        .tableA tr th {
+        padding:0 40px;
+        border: 1px #000 solid;
+        height: 40px;
+        background: #efefef;
+        }
+        .tableA tr td {
+        padding: 0 40px;
+        border: 1px #000 solid;
+        height: 40px;
+        text-align: center;
+        }
+        .tableA .footer td {
+        font-size: 20px;
+        font-weight: 700;
+        }
+        
+        /* 空一行 */
+        #tableblack th{
+            border:none;
+            background: #fff;
+        }
+        /* 空一列 */
+        .tableA .title th.first{
+            border:none;
+            background: #fff;
+        }
+        .tableA tr th.first{
+            border:none;
+            background: #fff;
+        }
+        .tableA .footer td.first{
+            border:none;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+            <div id='excel-down'>点击下载</div>
+            <script>
+                var data=[
+                    {name:"小明",sex:'男',age:'12',class:'1班',index:'1'},
+                    {name:"小白",sex:'男',age:'13',class:'2班',index:'1'},
+                    {name:"小黑",sex:'男',age:'14',class:'3班',index:'1'},
+                    {name:"小兰",sex:'男',age:'14',class:'3班',index:'1'},
+                ];
+                var len=Object.keys(data[0]).length;
+                var tableConent="";
+                for(var i=0;i<data.length;i++){
+                    //遍历头部
+                    if(i==0){
+                        tableConent+="<tr><th class='first'></th>";
+                        for(let key in data[i]){
+                            tableConent+=`<th>${key}</th>`;  
+                        }
+                        tableConent+="</tr>";
+                    }
+
+                    tableConent+="<tr><th class='first'></th>";
+                    for(let value of  Object.values(data[i])){
+                        tableConent+=`<th>${value}</th>`;  
+                    }
+                    tableConent+="</tr>";
+                }
+                var tableOuter=` <table class="tableA">
+                <tr id="tableblack">
+                  <th colspan="${len}"></th>
+                </tr>
+                <tr class="title">
+                  <th class='first'></th>
+                  <th colspan="${len}">学生信息</th>
+                </tr>
+                ${tableConent}
+                <tr class="footer">
+                  <th class='first'></th>
+                  <td colspan="${len}">总人数：${data.length}人</td>
+                </tr>
+              </table>`;
+                var excelHtml = `
+                    <html>
+                    <head>
+                        <meta charset='utf-8' />
+                        <style>
+                                .tableA {
+                            border-collapse: collapse;
+                            }
+                        
+                            .tableA .title th{
+                            text-align:center;
+                            height: 50px;
+                            font-size: 24px;
+                            font-family: '微软雅黑';
+                            font-weight: 700;
+                            }
+                        
+                            .tableA tr th {
+                            padding:0 40px;
+                            border: 1px #000 solid;
+                            height: 40px;
+                            background: #efefef;
+                            }
+                            .tableA tr td {
+                            padding: 0 40px;
+                            border: 1px #000 solid;
+                            height: 40px;
+                            text-align: center;
+                            }
+                            .tableA .footer td {
+                            font-size: 20px;
+                            font-weight: 700;
+                            }
+                            
+                            /* 空一行 */
+                            #tableblack th{
+                                border:none;
+                                background: #fff;
+                            }
+                            /* 空一列 */
+                            .tableA .title th.first{
+                                border:none;
+                                background: #fff;
+                            }
+                            .tableA tr th.first{
+                                border:none;
+                                background: #fff;
+                            }
+                            .tableA .footer td.first{
+                                border:none;
+                                background: #fff;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${tableOuter}
+                    </body>
+                    </html>
+                `;
+            var excelBlob = new Blob([excelHtml], {type: 'application/vnd.ms-excel'});
+                // 创建一个a标签
+            var oA = document.createElement('a');
+            // 利用URL.createObjectURL()方法为a元素生成blob URL
+            oA.href = URL.createObjectURL(excelBlob);
+            // 给文件命名
+            oA.download = '学生名单.xls';
+            // 模拟点击
+            
+
+            var down=document.getElementById("excel-down");
+            down.onclick=function(){
+                document.body.innerHTML=tableOuter;
+               oA.click();
+            }
+            </script>
+</body>
+</html>
